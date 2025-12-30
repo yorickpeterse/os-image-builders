@@ -1,0 +1,9 @@
+Defaults!/usr/local/sbin/visudo env_keep += "SUDO_EDITOR EDITOR VISUAL"
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+root ALL=(ALL:ALL) ALL
+
+# Allow users in the wheel group to run sudo without a password.
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL
+
+@includedir /usr/local/etc/sudoers.d

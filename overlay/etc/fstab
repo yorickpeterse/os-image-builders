@@ -1,0 +1,2 @@
+# This file must exist even if empty, as a bunch of FreeBSD commands (e.g.
+# `mount`) start spitting out errors if it doesn't.

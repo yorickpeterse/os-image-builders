@@ -1,0 +1,18 @@
+/set uname=root gname=wheel type=dir mode=0755
+.
+
+./etc
+./etc/rc.conf         mode=0644 type=file
+./etc/fstab           mode=0644 type=file
+./etc/ssh
+./etc/ssh/sshd_config mode=0644 type=file
+
+./usr
+./usr/local
+./usr/local/etc
+./usr/local/etc/sudoers mode=0440 type=file
+
+./home                            uname=admin gname=admin
+./home/admin                      uname=admin gname=admin mode=0700
+./home/admin/.ssh                 uname=admin gname=admin mode=0700
+./home/admin/.ssh/authorized_keys uname=admin gname=admin mode=0644 type=file
