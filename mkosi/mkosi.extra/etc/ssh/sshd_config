@@ -1,0 +1,5 @@
+Port 22
+PermitRootLogin no
+PasswordAuthentication no
+AuthorizedKeysFile .ssh/authorized_keys
+Include /etc/ssh/sshd_config.d/*.conf

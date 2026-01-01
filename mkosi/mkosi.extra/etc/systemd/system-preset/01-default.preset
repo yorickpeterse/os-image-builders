@@ -1,0 +1,9 @@
+# Enable SSH so we can access the host.
+enable sshd.service
+
+# Enable networking so the host may access the internet.
+enable systemd-networkd.service
+enable systemd-resolved.service
+
+# Enable time synchronization.
+enable systemd-timesyncd.service
