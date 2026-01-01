@@ -1,0 +1,23 @@
+[Container]
+ContainerName=zeversolar-monitor
+Image=ghcr.io/yorickpeterse/zeversolar-monitor:main
+PodmanArgs=--memory 32m
+
+# The 169.x IP is used to access the host.
+Environment=INVERTER_IP=192.168.1.251 DB_IP=169.254.1.2 DB_PORT=8089
+
+# SIGTERM is ignored, so we use SIGKILL so we don't have to wait unnecessarily
+# long.
+StopSignal=SIGKILL
+
+# Pull the image if needed (e.g. when booting for the first time).
+Pull=missing
+
+# Give the container its own namespace instead of reusing the root namespace.
+UserNS=auto
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

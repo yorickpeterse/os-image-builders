@@ -1,0 +1,33 @@
+# Transient /etc is _disabled_ (the default) as enabling it produces issues such
+# as https://github.com/bootc-dev/bootc/discussions/1435.
+
+FROM quay.io/fedora/fedora-bootc:43
+
+# Remove default packages I don't want.
+RUN dnf remove --assumeyes --quiet gssproxy udisks2 2>/dev/null
+
+# Install packages I do want.
+RUN dnf install --assumeyes --quiet htop 2>/dev/null
+
+# Services to disable and enable. For some reason systemd presets don't seem to
+# get picked up, so we have to enable/disable services the traditional way.
+RUN <<EOF
+systemctl disable \
+    bootc-fetch-apply-updates.timer \
+    bootc-fetch-apply-updates.service
+
+systemctl mask \
+    bootc-fetch-apply-updates.timer \
+    bootc-fetch-apply-updates.service
+
+systemctl enable sshd
+EOF
+
+COPY overlay/ /
+
+RUN sudo dnf clean all \
+    && rm -rf /var/{cache,log}/* \
+    && rm -rf /var/lib/dnf \
+    && rm -rf /root/*
+
+RUN bootc container lint
