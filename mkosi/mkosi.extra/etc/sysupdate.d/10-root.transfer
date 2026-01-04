@@ -1,0 +1,11 @@
+[Source]
+MatchPattern=image.root-%a.@u.raw
+Path=/var/updates
+Type=regular-file
+
+[Target]
+InstancesMax=2
+MatchPartitionType=root
+MatchPattern=%M_%A_root
+Path=auto
+Type=partition
