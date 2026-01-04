@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Permissions are fixed using systemd-tmpfiles upon first boot. This way we
+# don't need to run mkosi as root.
+useradd --create-home --groups wheel --uid 1000 --password '*' admin
