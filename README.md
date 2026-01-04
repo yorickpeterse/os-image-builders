@@ -3,9 +3,10 @@
 This repository contains a set of experiments in building immutable (ish) OS
 images for FreeBSD and Linux, using the following tools:
 
-- [Poudriere](https://github.com/freebsd/poudriere) for FreeBSD
-- [mkosi](https://mkosi.systemd.io/) for Linux
-- [bootc](https://bootc-dev.github.io/bootc/intro.html) for Linux
+- [Poudriere](https://github.com/freebsd/poudriere) (FreeBSD)
+- [bsdinstall](https://man.freebsd.org/cgi/man.cgi?query=bsdinstall&manpath=FreeBSD+15.0-RELEASE+and+Ports) (FreeBSD)
+- [mkosi](https://mkosi.systemd.io/) (Linux)
+- [bootc](https://bootc-dev.github.io/bootc/intro.html) (Linux)
 
 Each experiment resides in its own directory (e.g. `poudriere/` or `mkosi/`), so
 take a look at those for more details.
