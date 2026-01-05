@@ -2,15 +2,14 @@
 # as https://github.com/bootc-dev/bootc/discussions/1435.
 FROM quay.io/fedora/fedora-bootc:43
 
-# Remove default packages I don't want.
-RUN dnf remove --assumeyes --quiet gssproxy udisks2 >/dev/null
+COPY remove.txt /
+COPY install.txt /
 
-# Install packages I do want.
-RUN dnf install --assumeyes --quiet \
-    htop \
-    neovim \
-    zram-generator-defaults \
-    >/dev/null
+RUN <<EOF
+dnf remove  --assumeyes --quiet $(<remove.txt) >/dev/null
+dnf install --assumeyes --quiet $(<install.txt) >/dev/null
+rm {remove,install}.txt
+EOF
 
 # Services to disable and enable. For some reason systemd presets don't seem to
 # get picked up, so we have to enable/disable services the traditional way.
@@ -26,10 +25,12 @@ systemctl mask \
 systemctl enable sshd
 EOF
 
-RUN sudo dnf clean all \
-    && rm -rf /var/{cache,log}/* \
-    && rm -rf /var/lib/dnf \
-    && rm -rf /root/*
+RUN <<EOF
+dnf clean all
+rm -rf /var/{cache,log}/*
+rm -rf /var/lib/dnf
+rm -rf /root/*
+EOF
 
 COPY overlay/ /
 
