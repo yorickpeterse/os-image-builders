@@ -4,7 +4,10 @@ FROM quay.io/fedora/fedora-bootc:43
 
 RUN <<EOF
 dnf remove  --assumeyes --quiet \
+    amd-gpu-firmware \
     gssproxy \
+    nvidia-gpu-firmware \
+    python3-botocore \
     qemu-user-static \
     qemu-user-static-aarch64 \
     qemu-user-static-alpha \
@@ -26,6 +29,8 @@ dnf remove  --assumeyes --quiet \
     udisks2 \
     >/dev/null
 
+# These packages aren't necessary so we remove them in order to reduce the
+# image/container size.
 dnf install --assumeyes --quiet \
     fastfetch \
     firewalld \
@@ -33,15 +38,9 @@ dnf install --assumeyes --quiet \
     neovim \
     zram-generator-defaults \
     >/dev/null
-EOF
-
-# SSH should be allowed by default but it doesn't hurt to be explicit about
-# this.
-RUN firewall-offline-cmd --add-service ssh
 
 # Services to disable and enable. For some reason systemd presets don't seem to
 # get picked up, so we have to enable/disable services the traditional way.
-RUN <<EOF
 systemctl disable \
     bootc-fetch-apply-updates.timer \
     bootc-fetch-apply-updates.service
@@ -52,13 +51,18 @@ systemctl mask \
 
 systemctl enable sshd
 systemctl enable firewalld
-EOF
 
-RUN <<EOF
+# Clean up temporary files we don't want in the image.
 dnf clean all
 rm -rf /var/{cache,log}/*
 rm -rf /var/lib/dnf
 rm -rf /root/*
+
+# Documentation and unused locales aren't necessary on a server.
+rm -rf /usr/share/{man,doc}/*
+mv /usr/share/locale/{en,en_US} /tmp
+rm -rf /usr/share/locale/*
+mv /tmp/{en,en_US} /usr/share/locale
 EOF
 
 COPY overlay/ /
