@@ -68,3 +68,42 @@ registry.
   home directory. There's not really any other tool either, short of a custom
   `.service` file that runs a migration script of some sort
 - I know sysusers aren't really meant for this, but the alternatives are worse
+
+To upload an image to Hetzner cloud, run the following:
+
+```bash
+cat build/image/disk.raw | zstd -3 | \
+    ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking no" \
+    root@IP_ADDRESS \
+    'zstd --decompress | dd of=/dev/sda bs=1M status=progress'
+ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking no" \
+    root@IP_ADDRESS reboot
+```
+
+Script host checking is disabled because re-imaging the server otherwise results
+in SSH screaming the host changed. Of course you want to remove these `-o`
+options once the server is rebooted into the new bootc installation.
+
+You can also update an existing Fedora 43 installation like so (by running this
+on the host), based on [this
+article](https://fale.io/blog/2025/03/31/fedora-on-scaleway-dedibox-with-bootc):
+
+```bash
+podman run --rm \
+    -v /dev:/dev \
+    -v /var/lib/containers:/var/lib/containers \
+    -v /:/target \
+    --privileged \
+    --pid=host \
+    --security-opt label=type:unconfined_t \
+    ghcr.io/yorickpeterse/os-image-builders:bootc \
+    bootc install to-existing-root \
+    --root-ssh-authorized-keys /target/root/.ssh/authorized_keys \
+    --cleanup \
+    --acknowledge-destructive
+```
+
+After a reboot you'll have a new bootc installation, though the bootloader
+update service seems to fail and after another reboot the cleanup service fails.
+There's probably something simple I overlooked, but I'd probably just go with
+imaging from scratch.
