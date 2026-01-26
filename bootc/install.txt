@@ -1,3 +1,4 @@
+fastfetch
 htop
 neovim
 zram-generator-defaults

@@ -12,7 +12,7 @@ build:
 container:
 	sudo podman run --interactive --tty --rm ${IMAGE} /usr/bin/bash
 
-image:
+image: build
 	mkdir -p build/
 	sudo podman run \
 		--rm \
@@ -41,6 +41,12 @@ vm:
 		-nographic \
 		-snapshot build/qcow2/disk.qcow2
 
+ssh:
+	ssh -o "StrictHostKeyChecking no" \
+		-o "UserKnownHostsFile=/dev/null" \
+		-p ${PORT} \
+		admin@localhost
+
 update:
 	mkdir -p build/
 	sudo podman image save ${IMAGE} --output build/${UPDATE} --format oci-archive
@@ -58,4 +64,4 @@ update:
 clean:
 	rm -rf build
 
-.PHONY: build container image vm update clean
+.PHONY: build container image vm update clean ssh
