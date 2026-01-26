@@ -1,2 +1,0 @@
-gssproxy
-udisks2

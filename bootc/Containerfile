@@ -2,14 +2,42 @@
 # as https://github.com/bootc-dev/bootc/discussions/1435.
 FROM quay.io/fedora/fedora-bootc:43
 
-COPY remove.txt /
-COPY install.txt /
-
 RUN <<EOF
-dnf remove  --assumeyes --quiet $(<remove.txt) >/dev/null
-dnf install --assumeyes --quiet $(<install.txt) >/dev/null
-rm {remove,install}.txt
+dnf remove  --assumeyes --quiet \
+    gssproxy \
+    qemu-user-static \
+    qemu-user-static-aarch64 \
+    qemu-user-static-alpha \
+    qemu-user-static-arm \
+    qemu-user-static-hexagon \
+    qemu-user-static-hppa \
+    qemu-user-static-loongarch64 \
+    qemu-user-static-m68k \
+    qemu-user-static-microblaze \
+    qemu-user-static-mips \
+    qemu-user-static-or1k \
+    qemu-user-static-ppc \
+    qemu-user-static-riscv \
+    qemu-user-static-s390x \
+    qemu-user-static-sh4 \
+    qemu-user-static-sparc \
+    qemu-user-static-x86 \
+    qemu-user-static-xtensa \
+    udisks2 \
+    >/dev/null
+
+dnf install --assumeyes --quiet \
+    fastfetch \
+    firewalld \
+    htop \
+    neovim \
+    zram-generator-defaults \
+    >/dev/null
 EOF
+
+# SSH should be allowed by default but it doesn't hurt to be explicit about
+# this.
+RUN firewall-offline-cmd --add-service ssh
 
 # Services to disable and enable. For some reason systemd presets don't seem to
 # get picked up, so we have to enable/disable services the traditional way.
@@ -23,6 +51,7 @@ systemctl mask \
     bootc-fetch-apply-updates.service
 
 systemctl enable sshd
+systemctl enable firewalld
 EOF
 
 RUN <<EOF
