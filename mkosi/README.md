@@ -74,3 +74,7 @@ I didn't implement this because I gave up.
 - More specifically, if I have 200 servers to provision I don't want to have 5
   fail because systemd-repartd randomly pooped its pants, I want the equivalent
   of `dd if=IMAGE of=SERVER` and have a fully set up system
+- Due to the use of copy-on-write (if using BTRFS) the images/partitions will
+  appear to be quite reasonable in size (e.g. 600 MiB), but when you start
+  transferring them it turns out they are actually 20 GiB in size. This makes
+  them far too large to upload to e.g. a cloud provider such as Hetzner
