@@ -3,11 +3,20 @@
   <short>Public</short>
   <description>The default zone</description>
 
-  <!--
-  This is the default "public" zone as per Fedora 43, minus the SSH service
-  which is restricted to an explicit list of IPs.
-  -->
+  <!-- These services are available to everybody. -->
+  <service name="http"/>
   <service name="mdns"/>
   <service name="dhcpv6-client"/>
+
+  <!--
+  Only allow SSH from a known list of sources, cutting down the amount of failed
+  login attempts by bots.
+  -->
+  <rule>
+    <source ipset="admins" />
+    <service name="ssh" />
+    <accept />
+  </rule>
+
   <forward/>
 </zone>
