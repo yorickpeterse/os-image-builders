@@ -7,13 +7,14 @@ UPDATE := ${IMAGE}-$(shell date +%s).oci
 PORT := 2222
 
 build:
-	sudo podman build -t ${IMAGE} -f Containerfile .
+	podman build -t ${IMAGE} -f Containerfile .
 
 container:
-	sudo podman run --interactive --tty --rm ${IMAGE} /usr/bin/bash
+	podman run --interactive --tty --rm ${IMAGE} /usr/bin/bash
 
 image: build
 	mkdir -p build/
+	sudo podman build -t ${IMAGE} -f Containerfile .
 	sudo podman run \
 		--rm \
 		-it \
