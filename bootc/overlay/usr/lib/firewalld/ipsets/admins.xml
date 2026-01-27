@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:ip">
+  <short>admins</short>
+  <description>IP addresses of admins</description>
+  <entry>86.93.96.67</entry>
+</ipset>

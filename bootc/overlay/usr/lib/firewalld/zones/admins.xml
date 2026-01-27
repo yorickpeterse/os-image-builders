@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>admins</short>
+  <description>Services restricted to admins</description>
+  <source ipset="admins" />
+  <source address="10.0.0.0/16" />
+  <service name="ssh" />
+  <forward />
+</zone>

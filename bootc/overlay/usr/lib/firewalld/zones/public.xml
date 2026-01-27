@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Public</short>
+  <description>The default zone</description>
+
+  <!--
+  This is the default "public" zone as per Fedora 43, minus the SSH service
+  which is restricted to an explicit list of IPs.
+  -->
+  <service name="mdns"/>
+  <service name="dhcpv6-client"/>
+  <forward/>
+</zone>

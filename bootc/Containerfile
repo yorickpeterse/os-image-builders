@@ -3,6 +3,15 @@
 FROM quay.io/fedora/fedora-bootc:43
 
 RUN <<EOF
+dnf install --assumeyes --quiet \
+    fastfetch \
+    firewalld \
+    htop \
+    zram-generator-defaults \
+    >/dev/null
+
+# These packages aren't necessary so we remove them in order to reduce the
+# image/container size.
 dnf remove  --assumeyes --quiet \
     amd-gpu-firmware \
     gssproxy \
@@ -28,17 +37,9 @@ dnf remove  --assumeyes --quiet \
     qemu-user-static-xtensa \
     udisks2 \
     >/dev/null
+EOF
 
-# These packages aren't necessary so we remove them in order to reduce the
-# image/container size.
-dnf install --assumeyes --quiet \
-    fastfetch \
-    firewalld \
-    htop \
-    neovim \
-    zram-generator-defaults \
-    >/dev/null
-
+RUN <<EOF
 # Services to disable and enable. For some reason systemd presets don't seem to
 # get picked up, so we have to enable/disable services the traditional way.
 systemctl disable \
@@ -51,7 +52,9 @@ systemctl mask \
 
 systemctl enable sshd
 systemctl enable firewalld
+EOF
 
+RUN <<EOF
 # Clean up temporary files we don't want in the image.
 dnf clean all
 rm -rf /var/{cache,log}/*
