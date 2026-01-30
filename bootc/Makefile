@@ -12,7 +12,7 @@ build:
 container:
 	podman run --interactive --tty --rm ${IMAGE} /usr/bin/bash
 
-image: build
+image:
 	mkdir -p build/
 	sudo podman build -t ${IMAGE} -f Containerfile .
 	sudo podman run \
